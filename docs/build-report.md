@@ -1,10 +1,10 @@
-# Android 构建环境搭建与编译/测试验证报告（build-verify · 冻结版 v3 / 最终轮）
+# Android 构建环境搭建与编译/测试验证报告（build-verify · 冻结版 v4 / 最终交付）
 
-> 本文件由 build-verify 生成，记录最终冻结版（2026-10-28 20:35）的环境与验证结果。
+> 本文件由 build-verify 生成，记录最终冻结版（2026-10-28 20:53）的环境与验证结果。
 > 本角色未修改任何 app 源码（Java / res / Manifest / Gradle 脚本）。
-> 构建命令、日志、APK 校验值均可复现。
+> 构建命令、日志、APK 校验值均可复现。本文件现存放于 `docs/build-report.md`（由 Lead 归档入库）。
 
-## 1. 结论速览（冻结版 v3，最终交付）
+## 1. 结论速览（冻结版 v4，最终交付）
 
 | 项目 | 结果 |
 |---|---|
@@ -17,7 +17,7 @@
 
 最终产物：
 `C:\Users\zy330\Documents\deepseek-harness\default-workspace\dlut-FakeRun\app\build\outputs\apk\debug\app-debug.apk`
-（**7,366,122 字节 = 7.02 MiB / 7.37 MB**，SHA-256 `390FF36E9DD5CC234BAA19DE4C02DC8445EE6D3D8482F8F9AB3A5CB3A51F3DB1`）
+（**7,366,134 字节 = 7.02 MiB / 7.37 MB**，SHA-256 `91B2A53517542C26E95D00A9C4E05043111E4DDE2E63666B944F44469ECC899F`）
 
 ## 2. 环境与版本
 
@@ -32,7 +32,7 @@
   | build-tools;34.0.0 | 34.0.0 | `build-tools\34.0.0\aapt2.exe`（4,566,296 B） |
   | platform-tools | 37.0.1 | `platform-tools\adb.exe`（8,273,560 B） |
   | licenses | 全部已接受 | `sdkmanager --licenses` exit 0 |
-- `dlut-FakeRun/local.properties`（已被 `.gitignore:17` 忽略，不入库）：
+- `dlut-FakeRun/local.properties`（已被 `.gitignore` 忽略，不入库）：
   ```
   sdk.dir=C:/Users/zy330/Documents/deepseek-harness/default-workspace/.android-sdk
   ```
@@ -70,7 +70,7 @@ $env:TMP               = $env:TEMP
 - AGP：`Unable to initialize metrics, ensure C:\Users\zy330\.android is writable`（analytics 写用户目录失败，不影响产物）
 - javac：`Java compiler version 21 has deprecated support for compiling with source/target version 8`（项目 `compileOptions` 为 1.8，仅警告）
 
-## 4. 构建与单测结果（冻结版 v3）
+## 4. 构建与单测结果（冻结版 v4）
 
 ### 4.1 复现命令
 
@@ -82,21 +82,22 @@ cd <ws>\dlut-FakeRun
 ```
 
 结果：
-- 构建+单测：`BUILD SUCCESSFUL in 15s`，`36 actionable tasks: 14 executed, 22 up-to-date`
-- lint：`BUILD SUCCESSFUL in 42s`，`0 errors, 52 warnings`
-- 本轮一次通过，无编译/资源错误需要修复。
+- 构建+单测：`BUILD SUCCESSFUL in 10s`，`36 actionable tasks: 7 executed, 29 up-to-date`
+- lint：`BUILD SUCCESSFUL in 43s`，`0 errors, 52 warnings`
+- 本轮（v4）仅改 `strings.xml` 的 `repo_url` 与 README，一次通过，无编译/资源/lint 错误。
 
 ### 4.2 APK（最终交付）
 
 - 绝对路径：
   `C:\Users\zy330\Documents\deepseek-harness\default-workspace\dlut-FakeRun\app\build\outputs\apk\debug\app-debug.apk`
-- 大小：**7,366,122 字节（7.02 MiB / 7.37 MB）**
-- SHA-256：`390FF36E9DD5CC234BAA19DE4C02DC8445EE6D3D8482F8F9AB3A5CB3A51F3DB1`
-- MD5：`75898DF2613C9A886DBA802C6051B6E5`
-- 构建时间：2026-10-28 20:35:48（覆盖截至 20:35:22 的全部源码）
+- 大小：**7,366,134 字节（7.02 MiB / 7.37 MB）**
+- SHA-256：`91B2A53517542C26E95D00A9C4E05043111E4DDE2E63666B944F44469ECC899F`
+- MD5：`D55F2D983255D80EFABBDAEC54C478BF`
+- 构建时间：2026-10-28 20:53:10（覆盖截至 20:52:51 的全部源码）
 - 历史版本（均已被本版取代）：
   | 版本 | 时间 | 大小 | SHA-256 |
   |---|---|---|---|
+  | v3 | 20:35:48 | 7,366,122 B | `390FF36E9DD5CC234BAA19DE4C02DC8445EE6D3D8482F8F9AB3A5CB3A51F3DB1` |
   | v2 | 19:55:25 | 7,365,229 B | `C6D0C7D2B16CBDC2F333191D07002E6201BADB1174740DDEDC8CC35FB8B07783` |
   | v1 | 19:21:04 | 6,322,122 B | `90F6309AFAFEAB9C94184FF88E408A860478291104915A987C94A0B8C10DA64F` |
   | 19:15:30 | 19:15:30 | 6,761,676 B | `01E6C81604EAB86F00151922A4C8A0D3B711F585325D996BA6ADFC5B3CDB1B76` |
@@ -110,8 +111,10 @@ cd <ws>\dlut-FakeRun
   - 权限：ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION / ACCESS_MOCK_LOCATION / FOREGROUND_SERVICE / FOREGROUND_SERVICE_LOCATION / WAKE_LOCK / POST_NOTIFICATIONS / RECEIVE_BOOT_COMPLETED / SCHEDULE_EXACT_ALARM / INTERNET / ACCESS_NETWORK_STATE
   - 组件：`MainActivity`、`RouteSketchActivity`、`SimulationService`、`reminder.ReminderReceiver`、`reminder.BootReceiver`
   - FileProvider：`androidx.core.content.FileProvider`，`authorities="com.langqi.fakegps.fileprovider"`，`grantUriPermissions="true"`，meta-data `android.support.FILE_PROVIDER_PATHS`（`app/src/main/res/xml/file_paths.xml` → `<cache-path name="share" path="share/" />`）
-  - **内置路线资源**：`aapt2 dump resources` 确认 APK 内为 `raw/default_route`（`res/raw/default_route.kml`，4,007 B）；`raw/three_km` 已不存在。
-- 构建日志：`<ws>\dlut-FakeRun\build-log.txt`（8,862 B）
+  - 内置路线资源：APK 内为 `raw/default_route`（`res/raw/default_route.kml`，4,007 B）；`raw/three_km` 已不存在
+  - **仓库地址字符串（v4 新增校验）**：`aapt2 dump strings` 在 APK 字符串池中确认
+    `String #1259 : https://github.com/zy13967896784-sketch/dlut-FakeRun` 与 `String #1246 : 访问 GitHub 仓库`，即改名后的新仓库链接已打包进 APK。
+- 构建日志：`<ws>\dlut-FakeRun\build-log.txt`（5,270 B；.gitignore 已忽略）
 
 ### 4.3 单元测试（53 个，全绿）
 
@@ -129,16 +132,16 @@ HTML：`app\build\reports\tests\testDebugUnitTest\index.html`
 | com.langqi.fakegps.ExampleUnitTest（baseline 保留） | 1 | 0 | 0 | 0 |
 | **合计** | **53** | **0** | **0** | **0** |
 
-本轮 `RouteParserTest` 仅同步示例名称（宁大操场 / default_route.kml），未改断言，测试数与结果不变。
+说明：v4 仅改 `strings.xml` / README，测试代码未变，因此 `testDebugUnitTest` 为 UP-TO-DATE 并复用 v3 的测试结果（同一份测试字节码），结果仍为 53/53 全绿。
 
 ## 5. lintDebug（最终 0 errors / 52 warnings，通过）
 
-命令：`.\gradlew.bat --no-daemon --no-watch-fs lintDebug` → `BUILD SUCCESSFUL in 42s`，`0 errors, 52 warnings`。
+命令：`.\gradlew.bat --no-daemon --no-watch-fs lintDebug` → `BUILD SUCCESSFUL in 43s`，`0 errors, 52 warnings`。
 
 报告位置：
 - HTML：`app\build\reports\lint-results-debug.html`
 - 文本：`app\build\intermediates\lint_intermediate_text_report\debug\lintReportDebug\lint-results-debug.txt`
-- 控制台日志：`<ws>\dlut-FakeRun\lint-log.txt`
+- 控制台日志：`<ws>\dlut-FakeRun\lint-log.txt`（.gitignore 已忽略）
 
 52 warnings 分布（全部非阻断）：UnusedResources 24、SetTextI18n 9、HardcodedText 5、Overdraw 2、MonochromeLauncherIcon 2、InflateParams 2、UseCompatTextViewDrawableXml 2、ObsoleteSdkInt 2，其余 DisableBaselineAlignment / AlwaysShowAction / VectorPath / NotifyDataSetChanged 各 1。
 
@@ -150,7 +153,8 @@ HTML：`app\build\reports\tests\testDebugUnitTest\index.html`
 | 第 2 轮 | 19:16 | 1 error / 48 warnings | 上述修复生效，仅剩 AppLinkUrlError |
 | 第 3 轮（v1） | 19:21 | 0 errors / 48 warnings | Manifest 加 `tools:ignore="AppLinkUrlError"` 后清零 |
 | 第 4 轮（v2） | 19:56 | 0 errors / 52 warnings | 新图标引入 MonochromeLauncherIcon 2 + UnusedResources +2 |
-| 第 5 轮（v3 最终） | 20:36 | **0 errors / 52 warnings** | 内置路线/设置入口改动均为资源与字符串层，无新增 lint 问题 |
+| 第 5 轮（v3） | 20:36 | 0 errors / 52 warnings | 内置路线/设置入口改动均为资源与字符串层，无新增 lint 问题 |
+| 第 6 轮（v4 最终） | 20:53 | **0 errors / 52 warnings** | 仅 `repo_url`/README 改动，lint 结果不变 |
 
 ## 6. 构建过程中发现并修复的源码问题（由 Lead 修复，本角色仅验证）
 
@@ -159,15 +163,20 @@ HTML：`app\build\reports\tests\testDebugUnitTest\index.html`
 | 1 | 19:07 | `app/build.gradle.kts:47` `Unresolved reference: recyclerview` | version catalog 缺 `recyclerview` 别名；19:09:42 补 `recyclerview = "1.3.2"` 后通过 |
 | 2 | 19:20 | `RouteSketchActivity.java:56` `IConfigurationProvider 无法转换为 Configuration`，:57–:59 找不到符号 | osmdroid 6.1.18 的 `Configuration.getInstance()` 返回 `IConfigurationProvider`（`javap` 反查 AAR 证实）；改声明类型 + 补 import |
 | 3 | 19:54 | `MainActivity.java:440` `变量 adapter 可能尚未初始化` | 匿名 Listener 在 `RouteAdapter adapter = new RouteAdapter(...)` 初始化表达式内引用自身；改为 `(RouteAdapter) recycler.getAdapter()` |
-| 4 | 20:35 | （无错误） | 最终轮一次通过 |
+| 4 | 20:35 | （无错误） | v3 一次通过 |
+| 5 | 20:53 | （无错误） | v4 一次通过 |
 
 ## 7. 各轮功能改动与验证覆盖
 
-### v3（最终轮，20:35）
-- **内置路线替换**：删除 `res/raw/three_km.kml`，新增 `res/raw/default_route.kml`（宁大操场，105 点，约 1.03 km/圈，4,007 B）；`RouteStore.BUILTIN_ID = "builtin_ningda_track"`、内置名称「宁大操场」、解析源改 `default_route.kml`，并自动清理旧 `builtin_dlut_3k` 缓存与当前路线 id 指向旧值的情况；`RouteSketchActivity` 默认中心改为宁大坐标。验证：APK 内 `raw/default_route` 存在、`raw/three_km` 不存在。
-- **字符串**：`route_default_name` / `route_item_name_default` = 宁大操场，meta = 1.03 公里 · 105 个点；新增 `open_repo` / `repo_url`。
-- **设置页**：`sheet_settings` 新增 `btn_open_repo`，`MainActivity` 读取 `repo_url` 打开 GitHub。
-- **单测**：`RouteParserTest` 示例名称同步（仅文案，断言不变），总数仍 53。
+### v4（最终轮，20:53）
+- **仓库改名适配**：GitHub 仓库改为 `zy13967896784-sketch/dlut-FakeRun`；`app/src/main/res/values/strings.xml` 的 `repo_url` 与 `README.md` 仓库链接同步更新，其它源码不动。
+- 验证：构建通过；`aapt2 dump strings` 在 APK 中确认新 URL `https://github.com/zy13967896784-sketch/dlut-FakeRun` 与「访问 GitHub 仓库」文案已打包；README 不参与 APK 构建。
+
+### v3（20:35）
+- 内置路线替换：删 `res/raw/three_km.kml`，新增 `res/raw/default_route.kml`（宁大操场，105 点，约 1.03 km/圈，4,007 B）；`RouteStore.BUILTIN_ID = "builtin_ningda_track"`、内置名「宁大操场」、解析源改 `default_route.kml`，自动清理旧 `builtin_dlut_3k` 缓存；`RouteSketchActivity` 默认中心改宁大坐标。
+- 字符串：`route_default_name` / `route_item_name_default` = 宁大操场，meta = 1.03 公里 · 105 个点；新增 `open_repo` / `repo_url`。
+- 设置页：`sheet_settings` 新增 `btn_open_repo`，MainActivity 读取 `repo_url` 打开 GitHub。
+- 单测：`RouteParserTest` 示例名称同步（仅文案，断言不变），总数仍 53。
 
 ### v2（19:55）
 - 应用图标替换为新插画（`mipmap-*/ic_launcher*.png` + anydpi adaptive-icon 引用 `@mipmap` + `@color/launcher_background`）。
@@ -180,10 +189,10 @@ HTML：`app\build\reports\tests\testDebugUnitTest\index.html`
 
 ## 8. 时效性说明
 
-- 冻结版 v3：磁盘上最新源码 mtime = `2026-10-28 20:35:22`（`app/src/main/res/values/strings.xml`），构建于 `20:35:48` 完成，**APK / 测试 / lint 三项均基于该时刻源码**；20:36:38 复核无更新。
+- 冻结版 v4：磁盘上最新源码 mtime = `2026-10-28 20:52:51`（`app/src/main/res/values/strings.xml` 与 `README.md`），构建于 `20:53:10` 完成，**APK / 测试 / lint 三项均基于该时刻源码**；20:54 复核无更新。
 - 若此后任何 Java / res / Manifest / Gradle 被修改，需按 §4.1 复跑并更新本报告中的 APK 大小、SHA-256、测试计数与 lint 状态。
 - 交付时请只使用 §4.2 的「最终交付」APK 与其 SHA-256，勿与历史版本混淆。
 
 ## 9. 未修改 app 源码的声明
 
-本角色只写入了：`.android-sdk/**`（SDK）、`<ws>\.gradle-home`、`<ws>\.android-user-home`、`tmp/**`（下载/检查脚本）、`dlut-FakeRun/local.properties`（gitignored）、仓库根 `build-log.txt`、`lint-log.txt`、本报告。未修改任何 Java / res / AndroidManifest / Gradle 构建脚本。
+本角色只写入了：`.android-sdk/**`（SDK）、`<ws>\.gradle-home`、`<ws>\.android-user-home`、`tmp/**`（下载/检查脚本）、`dlut-FakeRun/local.properties`（gitignored）、仓库根 `build-log.txt`、`lint-log.txt`、本报告（现位于 `docs/build-report.md`）。未修改任何 Java / res / AndroidManifest / Gradle 构建脚本。

@@ -80,7 +80,7 @@
     <string name="switch_keep_screen">保持屏幕常亮</string>
     <string name="settings_hint">修改后将在下一次开始模拟时生效。</string>
     <string name="open_repo">访问 GitHub 仓库</string>
-    <string name="repo_url">https://github.com/zy13967896784-sketch/-</string>
+    <string name="repo_url">https://github.com/zy13967896784-sketch/dlut-FakeRun</string>
 
     <!-- 菜单 -->
     <string name="menu_help">使用说明</string>

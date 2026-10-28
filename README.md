@@ -110,7 +110,7 @@
 
 ## 构建
 
-> 项目仓库：https://github.com/zy13967896784-sketch/-（后续可在 GitHub 仓库设置里改名为 `dlut-FakeRun`，改名后旧链接会自动跳转）
+> 项目仓库：https://github.com/zy13967896784-sketch/dlut-FakeRun
 >
 > 应用内「设置 → 访问 GitHub 仓库」即跳转到该地址。
 

@@ -1,3 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FakeGPS</string>
+    <string name="app_name">轻跑</string>
+    <string name="toolbar_subtitle">畅动力 · 校园跑</string>
+
+    <!-- 状态卡 -->
+    <string name="status_waiting">等待开始</string>
+    <string name="status_running">模拟中</string>
+    <string name="status_paused">已暂停</string>
+    <string name="status_hint_idle">点击下方按钮开始模拟</string>
+    <string name="status_hint_running">定位已接管 · 保持前台运行</string>
+    <string name="unit_km">公里</string>
+    <string name="label_elapsed">用时</string>
+    <string name="label_pace">配速</string>
+    <string name="label_left">剩余</string>
+    <string name="value_distance_default">3.09</string>
+    <string name="value_elapsed_default">00:00</string>
+    <string name="value_pace_default">--′--″</string>
+    <string name="value_left_default">0.00</string>
+
+    <!-- 路线卡 / 路线库 -->
+    <string name="route_default_name">大工操场 3 公里</string>
+    <string name="route_default_meta">3.08 公里 · 224 个点</string>
+    <string name="route_preview_desc">路线预览</string>
+    <string name="btn_change_route">更换</string>
+    <string name="route_library_title">路线库</string>
+    <string name="route_library_hint">选择已保存的路线，或导入新的轨迹文件</string>
+    <string name="btn_import_file">导入 KML/GPX 文件</string>
+    <string name="btn_draw_route">地图手绘</string>
+    <string name="btn_paste_route">粘贴坐标</string>
+    <string name="route_delete">删除</string>
+    <string name="route_item_name_default">大工操场 3 公里</string>
+    <string name="route_item_meta_default">3.08 公里 · 224 个点</string>
+
+    <!-- 目标卡 -->
+    <string name="target_title">目标距离</string>
+    <string name="hint_target">目标里程</string>
+    <string name="unit_km_suffix">公里</string>
+    <string name="chip_2_km">2 公里</string>
+    <string name="chip_3_km">3 公里</string>
+    <string name="chip_5_km">5 公里</string>
+    <string name="pace_title">配速</string>
+    <string name="pace_value_default">5′30″/公里</string>
+    <string name="pace_min">3′00″</string>
+    <string name="pace_max">9′00″</string>
+    <string name="eta_default">预计用时 17 分 03 秒</string>
+
+    <!-- 提醒卡 -->
+    <string name="reminder_title">每日提醒</string>
+    <string name="reminder_time_default">每天 18:30</string>
+    <string name="btn_modify">修改</string>
+
+    <!-- 权限引导 -->
+    <string name="setup_text">尚未开启「模拟定位」权限，无法开始模拟</string>
+    <string name="btn_open_dev_settings">去开启</string>
+
+    <!-- 操作 -->
+    <string name="btn_start">开始模拟</string>
+    <string name="btn_stop">结束</string>
+    <string name="btn_done">完成</string>
+    <string name="btn_confirm">确定</string>
+    <string name="btn_cancel">取消</string>
+
+    <!-- 粘贴坐标对话框 -->
+    <string name="paste_title">粘贴坐标</string>
+    <string name="hint_route_name">路线名称（可选）</string>
+    <string name="hint_coords">坐标</string>
+    <string name="paste_hint">每行一组「纬度,经度」，可从畅动力或地图软件直接复制；名称留空时自动命名为「粘贴路线」。</string>
+
+    <!-- 高级设置 -->
+    <string name="settings_title">高级设置</string>
+    <string name="settings_subtitle">微调模拟参数，默认值适用于大多数情况</string>
+    <string name="hint_interval">广播间隔（秒）</string>
+    <string name="helper_interval">越小越平滑，耗电也越高</string>
+    <string name="hint_altitude">海拔（米）</string>
+    <string name="hint_acceleration">加速度（米/秒²）</string>
+    <string name="hint_speed_variance">配速浮动（±%）</string>
+    <string name="helper_speed_variance">0 表示匀速；5~10% 会让轨迹更自然</string>
+    <string name="switch_keep_screen">保持屏幕常亮</string>
+    <string name="settings_hint">修改后将在下一次开始模拟时生效。</string>
+
+    <!-- 菜单 -->
+    <string name="menu_help">使用说明</string>
+    <string name="menu_settings">设置</string>
+
+    <!-- 通知（每日提醒） -->
+    <string name="notification_channel_name">每日跑步提醒</string>
+    <string name="notification_channel_description">每天固定时间提醒你完成校园跑</string>
+    <string name="notification_title">该跑步啦</string>
+    <string name="notification_text">今天的校园跑还差一点，打开轻跑一键开始</string>
+    <string name="notification_action_start">一键开始</string>
+
+    <!-- 地图手绘路线 -->
+    <string name="route_sketch_title">手绘路线</string>
+    <string name="route_sketch_hint">点击地图添加点 · 双指缩放 · 底图 © OpenStreetMap</string>
+    <string name="route_sketch_empty">已选 0 个点</string>
+    <string name="btn_undo">撤销</string>
+    <string name="btn_clear">清空</string>
+    <string name="btn_save_route">保存并使用</string>
 </resources>

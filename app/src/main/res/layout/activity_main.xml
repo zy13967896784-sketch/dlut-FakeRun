@@ -1,34 +1,591 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:maxWidth="1600dp"
-    android:maxHeight="900dp"
-    android:minWidth="1600dp"
-    android:minHeight="900dp"
+    android:background="@color/bg_app"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Switch
-        android:id="@+id/switch_fakegps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="模拟位置"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- ================= 顶部标题栏 ================= -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_toolbar"
+        android:background="@color/bg_app"
+        android:elevation="0dp"
+        app:contentInsetStart="@dimen/space_page"
+        app:menu="@menu/menu_main"
+        app:subtitle="畅动力 · 校园跑"
+        app:subtitleTextAppearance="@style/TextAppearance.App.ToolbarSubtitle"
+        app:subtitleTextColor="@color/text_secondary"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle"
+        app:titleTextColor="@color/text_primary" />
 
-    <Button
-        android:id="@+id/btn_open_fake_gps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="打开 FakeGPS"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <!-- ================= 可滚动内容 ================= -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/space_page"
+            android:paddingBottom="@dimen/page_padding_bottom">
+
+            <!-- ========== 状态卡 ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_status"
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_card_gap">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_card_padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_state"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_pill_state"
+                            android:paddingStart="10dp"
+                            android:paddingTop="3dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="3dp"
+                            android:text="@string/status_waiting"
+                            android:textAppearance="@style/TextAppearance.App.Pill" />
+
+                        <TextView
+                            android:id="@+id/tv_state_hint"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/status_hint_idle"
+                            android:textAppearance="@style/TextAppearance.App.Label" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:baselineAligned="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:text="@string/value_distance_default"
+                            android:textAppearance="@style/TextAppearance.App.Number" />
+
+                        <TextView
+                            android:id="@+id/tv_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="@string/unit_km"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/progress_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:indeterminate="false"
+                        android:max="100"
+                        android:progress="0"
+                        app:indicatorColor="@color/brand_primary"
+                        app:trackColor="@color/track"
+                        app:trackCornerRadius="4dp"
+                        app:trackThickness="8dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_elapsed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/value_elapsed_default"
+                                android:textAppearance="@style/TextAppearance.App.Value" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/label_elapsed"
+                                android:textAppearance="@style/TextAppearance.App.Label.Small" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_pace"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/pace_value_default"
+                                android:textAppearance="@style/TextAppearance.App.Value" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/label_pace"
+                                android:textAppearance="@style/TextAppearance.App.Label.Small" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_target_left"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/value_left_default"
+                                android:textAppearance="@style/TextAppearance.App.Value" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/label_left"
+                                android:textAppearance="@style/TextAppearance.App.Label.Small" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ========== 路线卡 ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_route"
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_card_gap">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/space_card_padding"
+                        android:paddingTop="@dimen/space_card_padding"
+                        android:paddingEnd="8dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_route_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/route_default_name"
+                                android:textAppearance="@style/TextAppearance.App.RouteName" />
+
+                            <TextView
+                                android:id="@+id/tv_route_meta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="@string/route_default_meta"
+                                android:textAppearance="@style/TextAppearance.App.Label" />
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_change_route"
+                            style="@style/Widget.App.Button.Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/size_text_button"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/btn_change_route"
+                            app:icon="@drawable/ic_swap"
+                            app:iconGravity="textStart"
+                            app:iconSize="18dp" />
+                    </LinearLayout>
+
+                    <com.langqi.fakegps.ui.RoutePreviewView
+                        android:id="@+id/route_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_preview"
+                        android:layout_marginStart="@dimen/space_s"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="@dimen/space_s"
+                        android:layout_marginBottom="@dimen/space_s"
+                        android:background="@drawable/bg_route_preview"
+                        android:contentDescription="@string/route_preview_desc" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ========== 目标卡 ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_target"
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_card_gap">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_card_padding">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/target_title"
+                        android:textAppearance="@style/TextAppearance.App.CardTitle" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_target"
+                        style="@style/Widget.App.TextField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="@string/hint_target"
+                        app:suffixText="@string/unit_km_suffix">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_target"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:text="3.10"
+                            android:textSize="@dimen/text_input" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_target"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:checkedChip="@id/chip_3"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="false"
+                        app:singleLine="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_2"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="@string/chip_2_km"
+                            android:textColor="@color/chip_text"
+                            app:checkedIconVisible="false"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipCornerRadius="@dimen/radius_pill"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_3"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="@string/chip_3_km"
+                            android:textColor="@color/chip_text"
+                            app:checkedIconVisible="false"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipCornerRadius="@dimen/radius_pill"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_5"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkable="true"
+                            android:text="@string/chip_5_km"
+                            android:textColor="@color/chip_text"
+                            app:checkedIconVisible="false"
+                            app:chipBackgroundColor="@color/chip_background"
+                            app:chipCornerRadius="@dimen/radius_pill"
+                            app:chipStrokeColor="@color/chip_stroke"
+                            app:chipStrokeWidth="1dp" />
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pace_title"
+                            android:textColor="@color/text_primary"
+                            android:textSize="@dimen/text_body"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_pace_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="@string/pace_value_default"
+                            android:textColor="@color/brand_primary"
+                            android:textSize="@dimen/text_card_title"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/slider_pace"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:value="330"
+                        android:valueFrom="180"
+                        android:valueTo="540"
+                        android:stepSize="15"
+                        app:labelBehavior="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_pace_min"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pace_min"
+                            android:textAppearance="@style/TextAppearance.App.Label.Small" />
+
+                        <TextView
+                            android:id="@+id/tv_pace_max"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="@string/pace_max"
+                            android:textAppearance="@style/TextAppearance.App.Label.Small" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_eta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:drawableStart="@drawable/ic_time"
+                        android:drawablePadding="6dp"
+                        android:drawableTint="@color/text_secondary"
+                        android:gravity="center_vertical"
+                        android:text="@string/eta_default"
+                        android:textAppearance="@style/TextAppearance.App.Label" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ========== 每日提醒卡 ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_reminder"
+                style="@style/Widget.App.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_card_padding">
+
+                    <FrameLayout
+                        android:layout_width="@dimen/size_reminder_icon"
+                        android:layout_height="@dimen/size_reminder_icon"
+                        android:background="@drawable/bg_icon_circle">
+
+                        <ImageView
+                            android:layout_width="@dimen/size_reminder_icon_inner"
+                            android:layout_height="@dimen/size_reminder_icon_inner"
+                            android:layout_gravity="center"
+                            android:contentDescription="@string/reminder_title"
+                            android:src="@drawable/ic_bell"
+                            app:tint="@color/brand_secondary" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switch_reminder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:text="@string/reminder_title"
+                            android:textColor="@color/text_primary"
+                            android:textSize="@dimen/text_value" />
+
+                        <TextView
+                            android:id="@+id/tv_reminder_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/reminder_time_default"
+                            android:textAppearance="@style/TextAppearance.App.Label" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_pick_time"
+                        style="@style/Widget.App.Button.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/size_text_button"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/btn_modify" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ========== 权限引导卡（默认隐藏） ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_setup"
+                style="@style/Widget.App.Card.Warning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_card_padding">
+
+                    <ImageView
+                        android:layout_width="@dimen/size_icon_small"
+                        android:layout_height="@dimen/size_icon_small"
+                        android:contentDescription="@string/setup_text"
+                        android:src="@drawable/ic_location"
+                        app:tint="@color/warning_text" />
+
+                    <TextView
+                        android:id="@+id/tv_setup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="@string/setup_text"
+                        android:textColor="@color/warning_text"
+                        android:textSize="@dimen/text_label" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_open_dev_settings"
+                        style="@style/Widget.App.Button.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/size_text_button"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/btn_open_dev_settings"
+                        android:textColor="@color/warning_text"
+                        app:iconTint="@color/warning_text" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ================= 底部固定操作栏 ================= -->
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_bar"
+        android:elevation="@dimen/elevation_bar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_page"
+        android:paddingTop="@dimen/bottombar_vertical_padding"
+        android:paddingEnd="@dimen/space_page"
+        android:paddingBottom="@dimen/bottombar_vertical_padding">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_stop"
+            style="@style/Widget.App.Button.Outlined"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_button"
+            android:layout_marginEnd="12dp"
+            android:layout_weight="1"
+            android:text="@string/btn_stop"
+            android:visibility="gone"
+            app:icon="@drawable/ic_stop"
+            app:iconGravity="textStart"
+            app:iconSize="18dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_primary"
+            style="@style/Widget.App.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_button"
+            android:layout_weight="1"
+            android:text="@string/btn_start"
+            app:icon="@drawable/ic_play"
+            app:iconGravity="textStart"
+            app:iconSize="20dp" />
+    </LinearLayout>
+</LinearLayout>

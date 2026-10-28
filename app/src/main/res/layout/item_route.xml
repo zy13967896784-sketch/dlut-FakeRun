@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_route_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:minHeight="64dp"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/route_item_name_default"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_item_meta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/route_item_meta_default"
+            android:textAppearance="@style/TextAppearance.App.Label" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btn_item_delete"
+        android:layout_width="@dimen/size_delete_button"
+        android:layout_height="@dimen/size_delete_button"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/route_delete"
+        android:padding="10dp"
+        android:src="@drawable/ic_delete"
+        app:tint="@color/text_tertiary" />
+</LinearLayout>

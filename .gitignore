@@ -23,3 +23,7 @@ captures/
 *.iml
 .idea/
 *.apk
+
+# build/verification logs
+build-log.txt
+lint-log.txt

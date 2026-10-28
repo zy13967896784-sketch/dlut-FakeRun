@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.langqi.fakegps">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 【位置相关权限】 -->
-    <!-- 获取精确位置信息（GPS） -->
+    <!-- 定位与模拟定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 获取粗略位置信息（网络、Wi-Fi） -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- Android Q 开始允许前台和后台不同范围的位置访问 -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <!-- 允许创建模拟位置，用于测试目的 -->
     <uses-permission
         android:name="android.permission.ACCESS_MOCK_LOCATION"
         tools:ignore="MockLocation,ProtectedPermissions" />
-    <!-- Android 14 新增的前台服务位置权限 -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
-    <!-- 【前台服务和广播权限】 -->
-    <!-- 允许启动前台服务，确保服务持续运行 -->
+    <!-- 前台模拟服务 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <!-- 允许服务在设备启动完成后自动启动 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- 每日提醒 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- 允许发送粘性广播 -->
-    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+    <!-- 地图手绘：只用于加载 OpenStreetMap 底图瓦片 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -34,29 +32,61 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FakeGPS"
-        tools:targetApi="31">
+        tools:targetApi="34">
 
-        <!-- 【服务声明】 -->
-        <!-- 用于模拟位置信息的服务 -->
-        <service
-            android:name="com.langqi.fakegps.LocationMockService"
-            android:exported="false"
-            android:foregroundServiceType="location" />
-
-        <!-- 【活动声明】 -->
-        <!-- 应用启动的入口 Activity -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- 从文件管理器 / 聊天软件直接打开 KML、GPX 轨迹 -->
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.google-earth.kml+xml" />
+                <data android:mimeType="application/gpx+xml" />
+                <data android:mimeType="application/xml" />
+                <data android:mimeType="text/xml" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+
+            <!-- 通过系统分享把轨迹发给轻跑 -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
         </activity>
 
         <activity
-            android:name=".FakeGPSActivity"
-            android:exported="true" />
+            android:name=".RouteSketchActivity"
+            android:exported="false"
+            android:label="@string/route_sketch_title" />
+
+        <service
+            android:name=".SimulationService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <receiver
+            android:name=".reminder.ReminderReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".reminder.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

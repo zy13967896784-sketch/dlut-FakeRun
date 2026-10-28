@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FakeGPS" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!-- 深色主题：仅覆盖系统栏图标明暗，颜色由 values-night/colors.xml 提供 -->
+    <style name="Theme.FakeGPS" parent="Base.Theme.FakeGPS">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 </resources>

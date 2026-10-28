@@ -1,8 +1,38 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- 轻跑 · 单屏极简主题（Material 3 DayNight） -->
     <style name="Base.Theme.FakeGPS" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- 品牌色 -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorOnPrimary">@color/brand_on_primary</item>
+        <item name="colorPrimaryContainer">@color/brand_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/brand_on_primary_container</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorOnSecondary">@color/brand_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/brand_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/brand_on_secondary_container</item>
+
+        <!-- 表面与背景 -->
+        <item name="android:colorBackground">@color/bg_app</item>
+        <item name="android:windowBackground">@color/bg_app</item>
+        <item name="colorSurface">@color/surface_card</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorError">@color/danger</item>
+        <item name="colorControlHighlight">@color/ripple</item>
+
+        <!-- 文字 -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorTertiary">@color/text_tertiary</item>
+
+        <!-- 系统栏 -->
+        <item name="android:statusBarColor">@color/bg_app</item>
+        <item name="android:navigationBarColor">@color/bg_app</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
     </style>
 
     <style name="Theme.FakeGPS" parent="Base.Theme.FakeGPS" />

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 间距 -->
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_s">8dp</dimen>
+    <dimen name="space_m">12dp</dimen>
+    <dimen name="space_l">16dp</dimen>
+    <dimen name="space_xl">24dp</dimen>
+    <dimen name="space_page">16dp</dimen>
+    <dimen name="space_card_padding">16dp</dimen>
+    <dimen name="space_card_gap">12dp</dimen>
+    <dimen name="page_padding_bottom">24dp</dimen>
+
+    <!-- 圆角 -->
+    <dimen name="radius_card">20dp</dimen>
+    <dimen name="radius_button">18dp</dimen>
+    <dimen name="radius_field">14dp</dimen>
+    <dimen name="radius_preview">16dp</dimen>
+    <dimen name="radius_pill">100dp</dimen>
+
+    <!-- 尺寸 -->
+    <dimen name="size_button">56dp</dimen>
+    <dimen name="size_button_small">48dp</dimen>
+    <dimen name="size_icon">24dp</dimen>
+    <dimen name="size_icon_small">18dp</dimen>
+    <dimen name="size_icon_tiny">16dp</dimen>
+    <dimen name="size_preview">132dp</dimen>
+    <dimen name="size_toolbar">64dp</dimen>
+    <dimen name="size_reminder_icon">40dp</dimen>
+    <dimen name="size_reminder_icon_inner">20dp</dimen>
+    <dimen name="size_delete_button">40dp</dimen>
+    <dimen name="size_text_button">40dp</dimen>
+    <dimen name="bottombar_vertical_padding">10dp</dimen>
+    <dimen name="elevation_card">1dp</dimen>
+    <dimen name="elevation_bar">8dp</dimen>
+
+    <!-- 字号 -->
+    <dimen name="text_toolbar_title">20sp</dimen>
+    <dimen name="text_toolbar_subtitle">11sp</dimen>
+    <dimen name="text_status_number">52sp</dimen>
+    <dimen name="text_status_unit">16sp</dimen>
+    <dimen name="text_card_title">16sp</dimen>
+    <dimen name="text_route_name">17sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_value">15sp</dimen>
+    <dimen name="text_label">12sp</dimen>
+    <dimen name="text_label_small">11sp</dimen>
+    <dimen name="text_button">16sp</dimen>
+    <dimen name="text_input">16sp</dimen>
+</resources>

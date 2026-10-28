@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深色主题：同名字色自动覆盖 -->
+    <color name="brand_primary">#5FBFA0</color>
+    <color name="brand_primary_dark">#7FD2B7</color>
+    <color name="brand_on_primary">#06251B</color>
+    <color name="brand_primary_container">#173B2E</color>
+    <color name="brand_on_primary_container">#B9E6D5</color>
+    <color name="brand_secondary">#E8A05C</color>
+    <color name="brand_on_secondary">#3A2008</color>
+    <color name="brand_secondary_container">#3A2A17</color>
+    <color name="brand_on_secondary_container">#F6D9B6</color>
+
+    <color name="bg_app">#101512</color>
+    <color name="surface_card">#1A211D</color>
+    <color name="surface_variant">#232C26</color>
+    <color name="route_preview_bg">#1E2822</color>
+
+    <color name="text_primary">#E7EFEA</color>
+    <color name="text_secondary">#A6B5AC</color>
+    <color name="text_tertiary">#7F8F86</color>
+
+    <color name="outline">#33413A</color>
+    <color name="track">#2B3832</color>
+    <color name="icon_tint">#A6B5AC</color>
+    <color name="ripple">#33FFFFFF</color>
+    <color name="ripple_on_primary">#33000000</color>
+
+    <color name="warning_bg">#35291A</color>
+    <color name="warning_text">#F0C08A</color>
+    <color name="danger">#F2B8B5</color>
+
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+</resources>

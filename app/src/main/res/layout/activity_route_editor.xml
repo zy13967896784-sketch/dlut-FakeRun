@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_app"
+    android:orientation="vertical"
+    tools:context=".RouteSketchActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/editor_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_toolbar"
+        android:background="@color/bg_app"
+        app:navigationIcon="@drawable/ic_close"
+        app:navigationIconTint="@color/text_primary"
+        app:title="@string/route_sketch_title"
+        app:titleTextAppearance="@style/TextAppearance.App.ToolbarTitle"
+        app:titleTextColor="@color/text_primary" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/surface_card">
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/route_sketch_title" />
+
+        <TextView
+            android:id="@+id/tv_editor_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_pill_state"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="@string/route_sketch_hint"
+            android:textAppearance="@style/TextAppearance.App.Label" />
+
+        <TextView
+            android:id="@+id/tv_point_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_pill_state"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp"
+            android:text="@string/route_sketch_empty"
+            android:textAppearance="@style/TextAppearance.App.Pill" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_bar"
+        android:elevation="@dimen/elevation_bar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_page"
+        android:paddingTop="@dimen/bottombar_vertical_padding"
+        android:paddingEnd="@dimen/space_page"
+        android:paddingBottom="@dimen/bottombar_vertical_padding">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_undo"
+            style="@style/Widget.App.Button.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_button_small"
+            android:enabled="false"
+            android:text="@string/btn_undo" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_clear"
+            style="@style/Widget.App.Button.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_button_small"
+            android:layout_marginStart="8dp"
+            android:enabled="false"
+            android:text="@string/btn_clear" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save_route"
+            style="@style/Widget.App.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/size_button_small"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@string/btn_save_route"
+            app:icon="@drawable/ic_check"
+            app:iconGravity="textStart"
+            app:iconSize="18dp" />
+    </LinearLayout>
+
+</LinearLayout>

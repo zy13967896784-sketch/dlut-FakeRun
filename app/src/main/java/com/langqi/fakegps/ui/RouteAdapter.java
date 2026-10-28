@@ -23,7 +23,8 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.Holder> {
     public interface Listener {
         void onRouteSelected(RouteStore.RouteSummary summary);
 
-        void onRouteDelete(RouteStore.RouteSummary summary);
+        /** 点击行尾「更多」按钮：重命名 / 编辑 / 导出 / 分享 / 删除。 */
+        void onRouteActions(RouteStore.RouteSummary summary);
     }
 
     private final List<RouteStore.RouteSummary> items = new ArrayList<>();
@@ -62,9 +63,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.Holder> {
                 listener.onRouteSelected(summary);
             }
         });
-        holder.delete.setOnClickListener(v -> {
+        holder.more.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onRouteDelete(summary);
+                listener.onRouteActions(summary);
             }
         });
     }
@@ -77,13 +78,13 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.Holder> {
     static final class Holder extends RecyclerView.ViewHolder {
         final TextView name;
         final TextView meta;
-        final ImageButton delete;
+        final ImageButton more;
 
         Holder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.tv_item_name);
             meta = itemView.findViewById(R.id.tv_item_meta);
-            delete = itemView.findViewById(R.id.btn_item_delete);
+            more = itemView.findViewById(R.id.btn_item_more);
         }
     }
 }

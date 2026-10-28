@@ -36,4 +36,7 @@
 
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
+
+    <!-- 启动图标自适应背景（与图标插画底色一致） -->
+    <color name="launcher_background">#D9D4DB</color>
 </resources>

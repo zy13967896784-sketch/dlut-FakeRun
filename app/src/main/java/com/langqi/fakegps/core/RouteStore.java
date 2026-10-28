@@ -110,6 +110,37 @@ public final class RouteStore {
         }
     }
 
+    /** 按 id 读取路线，不存在或损坏时返回 null。 */
+    public Route get(String id) {
+        return loadSafely(id);
+    }
+
+    /** 路线的原始来源格式（KML / GPX / TXT / DRAW）。 */
+    public String formatOf(String id) {
+        return readFormat(new File(directory, id + ".json"));
+    }
+
+    /** 重命名路线（轨迹不变），成功返回 true。 */
+    public boolean rename(String id, String newName) {
+        Route route = loadSafely(id);
+        if (route == null) {
+            return false;
+        }
+        Route renamed = new Route(sanitizeName(newName), route.points());
+        writeRoute(id, renamed, readFormat(new File(directory, id + ".json")), BUILTIN_ID.equals(id));
+        cache.put(id, renamed);
+        return true;
+    }
+
+    /** 用地图编辑后的轨迹覆盖已有路线，保持 id / 名称 / 格式不变。 */
+    public Route updatePoints(String id, String name, List<GeoPoint> points, String format) {
+        Route route = new Route(sanitizeName(name), points);
+        writeRoute(id, route, format == null ? RouteParser.FORMAT_TEXT : format, BUILTIN_ID.equals(id));
+        cache.put(id, route);
+        prefs.setRouteId(id);
+        return route;
+    }
+
     /** 导入一条新路线，返回保存后的路线。 */
     public Route importRoute(String name, List<GeoPoint> points, String format) {
         Route route = new Route(sanitizeName(name), points);

@@ -1,23 +1,23 @@
-# Android 构建环境搭建与编译/测试验证报告（build-verify · 冻结版）
+# Android 构建环境搭建与编译/测试验证报告（build-verify · 冻结版 v2）
 
-> 本文件由 build-verify 生成，记录最终冻结版（2026-10-28 19:21）的环境与验证结果。
+> 本文件由 build-verify 生成，记录最新冻结版（2026-10-28 19:55）的环境与验证结果。
 > 本角色未修改任何 app 源码（Java / res / Manifest / Gradle 脚本）。
 > 构建命令、日志、APK 校验值均可复现。
 
-## 1. 结论速览（最终冻结版）
+## 1. 结论速览（冻结版 v2）
 
 | 项目 | 结果 |
 |---|---|
 | Gradle 配置阶段（`help`） | **BUILD SUCCESSFUL** |
 | `assembleDebug` | **BUILD SUCCESSFUL**，产出 debug APK |
-| `testDebugUnitTest` | **50 个单测全部通过**（0 失败 / 0 错误 / 0 跳过，6 个 suite） |
-| `lintDebug`（可选） | **BUILD SUCCESSFUL：0 errors / 48 warnings** |
+| `testDebugUnitTest` | **53 个单测全部通过**（0 失败 / 0 错误 / 0 跳过，7 个 suite） |
+| `lintDebug`（可选） | **BUILD SUCCESSFUL：0 errors / 52 warnings** |
 | SDK 工具链 | 已安装并验证（见 §2） |
-| 新增第三方依赖 | `org.osmdroid:osmdroid-android:6.1.18`（Maven Central，AAR 已下载并合入） |
+| 第三方依赖 | `org.osmdroid:osmdroid-android:6.1.18`（Maven Central，AAR 已合入） |
 
 最终产物：
 `C:\Users\zy330\Documents\deepseek-harness\default-workspace\dlut-FakeRun\app\build\outputs\apk\debug\app-debug.apk`
-（**6,322,122 字节 = 6.03 MiB / 6.32 MB**，SHA-256 `90F6309AFAFEAB9C94184FF88E408A860478291104915A987C94A0B8C10DA64F`）
+（**7,365,229 字节 = 7.02 MiB / 7.37 MB**，SHA-256 `C6D0C7D2B16CBDC2F333191D07002E6201BADB1174740DDEDC8CC35FB8B07783`）
 
 ## 2. 环境与版本
 
@@ -36,7 +36,7 @@
   ```
   sdk.dir=C:/Users/zy330/Documents/deepseek-harness/default-workspace/.android-sdk
   ```
-- 项目依赖（`gradle/libs.versions.toml`）：appcompat 1.6.1、material 1.10.0、activity 1.8.0、constraintlayout 2.1.4、recyclerview 1.3.2、**osmdroid-android 6.1.18**、junit 4.13.2、androidx.test.ext:junit 1.1.5、espresso-core 3.5.1。
+- 项目依赖（`gradle/libs.versions.toml`）：appcompat 1.6.1、material 1.10.0、activity 1.8.0、constraintlayout 2.1.4、recyclerview 1.3.2、osmdroid-android 6.1.18、junit 4.13.2、androidx.test.ext:junit 1.1.5、espresso-core 3.5.1。
 
 ## 3. 必读：本机（DSH 沙箱）环境适配
 
@@ -70,7 +70,7 @@ $env:TMP               = $env:TEMP
 - AGP：`Unable to initialize metrics, ensure C:\Users\zy330\.android is writable`（analytics 写用户目录失败，不影响产物）
 - javac：`Java compiler version 21 has deprecated support for compiling with source/target version 8`（项目 `compileOptions` 为 1.8，仅警告）
 
-## 4. 构建与单测结果（冻结版）
+## 4. 构建与单测结果（冻结版 v2）
 
 ### 4.1 复现命令
 
@@ -82,30 +82,33 @@ cd <ws>\dlut-FakeRun
 ```
 
 结果：
-- 构建+单测：`BUILD SUCCESSFUL in 14s`，`36 actionable tasks: 14 executed, 22 up-to-date`
-- lint：`BUILD SUCCESSFUL in 43s`，`0 errors, 48 warnings`
+- 构建+单测：`BUILD SUCCESSFUL in 12s`，`36 actionable tasks: 8 executed, 28 up-to-date`
+- lint：`BUILD SUCCESSFUL in 43s`，`0 errors, 52 warnings`
 
 ### 4.2 APK
 
 - 绝对路径：
   `C:\Users\zy330\Documents\deepseek-harness\default-workspace\dlut-FakeRun\app\build\outputs\apk\debug\app-debug.apk`
-- 大小：**6,322,122 字节（6.03 MiB / 6.32 MB）**
-- SHA-256：`90F6309AFAFEAB9C94184FF88E408A860478291104915A987C94A0B8C10DA64F`
-- MD5：`6110DC886AD1F7888C64791CF4DE3CC3`
-- 构建时间：2026-10-28 19:21:04（覆盖截至 19:20:45 的全部源码）
+- 大小：**7,365,229 字节（7.02 MiB / 7.37 MB）**
+- SHA-256：`C6D0C7D2B16CBDC2F333191D07002E6201BADB1174740DDEDC8CC35FB8B07783`
+- MD5：`CBF39E2C9132E2850C37701D73497FD2`
+- 构建时间：2026-10-28 19:55:25（覆盖截至 19:55:08 的全部源码）
 - 历史版本（均已被本版取代）：
-  - 19:15:30 版：6,761,676 B，SHA-256 `01E6C81604EAB86F00151922A4C8A0D3B711F585325D996BA6ADFC5B3CDB1B76`（无 osmdroid / 无手绘路线）
-  - 19:12:19 版：5,751,784 B，SHA-256 `B2D6E229ED66BB5440054B849F314C623043D51C8945BA5F51391975C8EC745A`
+  - 19:21:04 版（v1 冻结）：6,322,122 B，SHA-256 `90F6309AFAFEAB9C94184FF88E408A860478291104915A987C94A0B8C10DA64F`
+  - 19:15:30 版：6,761,676 B，SHA-256 `01E6C81604EAB86F00151922A4C8A0D3B711F585325D996BA6ADFC5B3CDB1B76`
+  - 19:12:19 版（初版）：5,751,784 B，SHA-256 `B2D6E229ED66BB5440054B849F314C623043D51C8945BA5F51391975C8EC745A`
 - aapt2 badging 关键项：
   - `package=com.langqi.fakegps`，`versionName=2.0.0`，`versionCode=2`
   - `minSdk=26`，`targetSdk=34`，`compileSdk=34`
   - `application-label='轻跑'`，`launchable-activity=com.langqi.fakegps.MainActivity`
+  - **应用图标已切换到新插画**：`application-icon-{160,240,320,480,640,65534}` 全部解析到 `res/mipmap-anydpi-v21/ic_launcher.xml`（自适应图标 XML，内部引用新的 `@mipmap/ic_launcher_foreground` PNG 与 `@color/launcher_background`）
   - 无 `native-code`（纯 Java，无 NDK）
-  - 权限：ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION / ACCESS_MOCK_LOCATION / FOREGROUND_SERVICE / FOREGROUND_SERVICE_LOCATION / WAKE_LOCK / POST_NOTIFICATIONS / RECEIVE_BOOT_COMPLETED / SCHEDULE_EXACT_ALARM / **INTERNET** / **ACCESS_NETWORK_STATE**（后两项为 osmdroid 联网瓦片所需，已生效）
-  - 合并后 Manifest 组件：`MainActivity`、`RouteSketchActivity`（手绘路线页）、`SimulationService`、`reminder.ReminderReceiver`、`reminder.BootReceiver`
-- 构建日志：`<ws>\dlut-FakeRun\build-log.txt`（8,862 B）
+  - 权限：ACCESS_FINE_LOCATION / ACCESS_COARSE_LOCATION / ACCESS_MOCK_LOCATION / FOREGROUND_SERVICE / FOREGROUND_SERVICE_LOCATION / WAKE_LOCK / POST_NOTIFICATIONS / RECEIVE_BOOT_COMPLETED / SCHEDULE_EXACT_ALARM / INTERNET / ACCESS_NETWORK_STATE
+  - 合并后 Manifest 组件：`MainActivity`、`RouteSketchActivity`、`SimulationService`、`reminder.ReminderReceiver`、`reminder.BootReceiver`
+  - **FileProvider 已生效**：`androidx.core.content.FileProvider`，`authorities="com.langqi.fakegps.fileprovider"`，`grantUriPermissions="true"`，meta-data `android.support.FILE_PROVIDER_PATHS`（配置见 `app/src/main/res/xml/file_paths.xml`：`<cache-path name="share" path="share/" />`）
+- 构建日志：`<ws>\dlut-FakeRun\build-log.txt`（8,992 B）
 
-### 4.3 单元测试（50 个，全绿）
+### 4.3 单元测试（53 个，全绿）
 
 结果 XML：`app\build\test-results\testDebugUnitTest\TEST-*.xml`
 HTML：`app\build\reports\tests\testDebugUnitTest\index.html`
@@ -114,48 +117,56 @@ HTML：`app\build\reports\tests\testDebugUnitTest\index.html`
 |---|---|---|---|---|
 | com.langqi.fakegps.core.FormatsTest | 8 | 0 | 0 | 0 |
 | com.langqi.fakegps.core.GeoMathTest | 9 | 0 | 0 | 0 |
+| **com.langqi.fakegps.core.RouteExporterTest（本轮新增）** | **3** | 0 | 0 | 0 |
 | com.langqi.fakegps.core.RouteParserTest | 8 | 0 | 0 | 0 |
 | com.langqi.fakegps.core.RouteTest | 8 | 0 | 0 | 0 |
 | com.langqi.fakegps.reminder.ReminderTimeTest | 16 | 0 | 0 | 0 |
 | com.langqi.fakegps.ExampleUnitTest（baseline 保留） | 1 | 0 | 0 | 0 |
-| **合计** | **50** | **0** | **0** | **0** |
+| **合计** | **53** | **0** | **0** | **0** |
 
-说明：本版新增的 `RouteSketchActivity`（手绘路线）与 `speedVariance`（配速随机浮动）属 UI/服务层，未新增纯 JVM 单测，故测试总数仍为 50。
+说明：本轮新增 `core/RouteExporter`（KML/GPX 导出）并配 3 个单测，总数由 50 → 53；其余 UI/服务层改动（图标、路线管理菜单、FileProvider 分享）未新增纯 JVM 单测。
 
-## 5. lintDebug（最终 0 errors / 48 warnings，通过）
+## 5. lintDebug（最终 0 errors / 52 warnings，通过）
 
-命令：`.\gradlew.bat --no-daemon --no-watch-fs lintDebug` → `BUILD SUCCESSFUL in 43s`，`0 errors, 48 warnings`。
+命令：`.\gradlew.bat --no-daemon --no-watch-fs lintDebug` → `BUILD SUCCESSFUL in 43s`，`0 errors, 52 warnings`。
 
 报告位置：
 - HTML：`app\build\reports\lint-results-debug.html`
 - 文本：`app\build\intermediates\lint_intermediate_text_report\debug\lintReportDebug\lint-results-debug.txt`
 - 控制台日志：`<ws>\dlut-FakeRun\lint-log.txt`
 
-48 warnings 分布（全部非阻断）：UnusedResources 22、SetTextI18n 9、HardcodedText 5、InflateParams 2、Overdraw 2、UseCompatTextViewDrawableXml 2、ObsoleteSdkInt 2，其余 AlwaysShowAction / DisableBaselineAlignment / VectorPath / NotifyDataSetChanged 各 1。
+52 warnings 分布（全部非阻断）：UnusedResources 24、SetTextI18n 9、HardcodedText 5、Overdraw 2、**MonochromeLauncherIcon 2**（新图标未提供 monochrome 层，仅主题化图标提示）、InflateParams 2、UseCompatTextViewDrawableXml 2、ObsoleteSdkInt 2，其余 DisableBaselineAlignment / AlwaysShowAction / VectorPath / NotifyDataSetChanged 各 1。
 
 ### 5.1 lint 修复轨迹（供追溯）
 
 | 轮次 | 时间 | 结果 | 说明 |
 |---|---|---|---|
-| 第 1 轮 | 19:13 | 9 errors / 48 warnings | WrongConstant（MockLocationEngine:99/100）、AppLinkUrlError（Manifest:43）、UnspecifiedRegisterReceiverFlag（MainActivity:888）、UseAppTint×4（activity_main.xml:468/527、item_route.xml:49） |
-| 第 2 轮 | 19:16 | 1 error / 48 warnings | MockLocationEngine 改用 `ProviderProperties.*` + `@SuppressLint`、`app:tint`、MainActivity 分支、`BROWSABLE` 移除均已生效；仅剩 Manifest:43 的 AppLinkUrlError |
-| 第 3 轮（冻结） | 19:21 | **0 errors / 48 warnings** | Manifest 第 47 行 `<intent-filter tools:ignore="AppLinkUrlError">` 后清零 |
+| 第 1 轮 | 19:13 | 9 errors / 48 warnings | WrongConstant（MockLocationEngine:99/100）、AppLinkUrlError（Manifest:43）、UnspecifiedRegisterReceiverFlag（MainActivity:888）、UseAppTint×4 |
+| 第 2 轮 | 19:16 | 1 error / 48 warnings | MockLocationEngine 改 `ProviderProperties.*`+`@SuppressLint`、`app:tint`、MainActivity 分支、`BROWSABLE` 移除均已生效 |
+| 第 3 轮（v1 冻结） | 19:21 | **0 errors / 48 warnings** | Manifest 第 47 行 `tools:ignore="AppLinkUrlError"` 后清零 |
+| 第 4 轮（v2 冻结） | 19:56 | **0 errors / 52 warnings** | 新图标引入 2 条 MonochromeLauncherIcon、UnusedResources +2，仍 0 error |
 
 ## 6. 构建过程中发现并修复的源码问题（由 Lead 修复，本角色仅验证）
 
-1. **19:07 首次 `help` 失败**：`app/build.gradle.kts:47 implementation(libs.recyclerview)` 时 `gradle/libs.versions.toml` 尚无 `recyclerview` 别名 → 19:09:42 补充 `recyclerview = "1.3.2"` 后通过。教训：新增依赖必须同步加 version catalog 别名，否则配置阶段就失败。
-2. **19:20 冻结版首跑编译失败**（4 个错误，均在 `RouteSketchActivity.java`）：
-   - `:56` `Configuration configuration = Configuration.getInstance();` → `IConfigurationProvider 无法转换为 Configuration`
-   - `:57/:58/:59` `setUserAgentValue(…)` / `setOsmdroidBasePath(…)` / `setOsmdroidTileCache(…)` 找不到符号
-   - 根因：osmdroid 6.1.18 的 `Configuration.getInstance()` 返回 `IConfigurationProvider`（已用 `javap` 反查 AAR 内 `classes.jar` 确认）。
-   - 修复：`IConfigurationProvider configuration = Configuration.getInstance();` + `import org.osmdroid.config.IConfigurationProvider;`（57–59 行不变）→ 19:20:45 修复后本轮全绿。
+| # | 时间 | 失败点 | 根因与修复 |
+|---|---|---|---|
+| 1 | 19:07 | `app/build.gradle.kts:47` `Unresolved reference: recyclerview` | version catalog 缺 `recyclerview` 别名；19:09:42 补 `recyclerview = "1.3.2"` 后通过 |
+| 2 | 19:20 | `RouteSketchActivity.java:56` `IConfigurationProvider 无法转换为 Configuration`，:57–:59 找不到符号 | osmdroid 6.1.18 的 `Configuration.getInstance()` 返回 `IConfigurationProvider`（用 `javap` 反查 AAR 内 `classes.jar` 证实）；改为 `IConfigurationProvider configuration = ...` + 补 import |
+| 3 | 19:54 | `MainActivity.java:440` `变量 adapter 可能尚未初始化` | 匿名 Listener 在 `RouteAdapter adapter = new RouteAdapter(...)` 的初始化表达式内引用 `adapter` 自身（JLS definite-assignment 禁止）；采用方案 A：`showRouteActions(dialog, (RouteAdapter) recycler.getAdapter(), summary);` |
 
-## 7. 时效性说明
+## 7. 本轮（v2）验证的功能改动清单
 
-- 冻结版：磁盘上最新源码 mtime = `2026-10-28 19:20:45`（`RouteSketchActivity.java`），构建于 `19:21:04` 完成，**APK / 测试 / lint 三项均基于该时刻源码**，之后源码未再变动（19:21:55 复核无更新）。
+- **应用图标**：旧 webp / drawable 自适应图标删除，新增 `mipmap-{m,h,x,xx,xxx}dpi/ic_launcher*.png` 与 `ic_launcher_foreground.png`；`mipmap-anydpi` 的 adaptive-icon 改引用 `@mipmap` + `@color/launcher_background`（badging 已确认图标链路正确）。
+- **路线管理**：`item_route` 行尾「⋯」菜单（`ic_more_vert`）；`RouteAdapter.Listener` 拆为 `onRouteSelected` / `onRouteActions`；`RouteStore` 新增 `get/rename/updatePoints/formatOf`；新增 `core/RouteExporter`（KML/GPX）；`RouteSketchActivity` 支持 `EXTRA_ROUTE_ID` 编辑既有轨迹；`MainActivity` 支持重命名 / 地图编辑 / 导出 KML、GPX（SAF CreateDocument）/ 分享（FileProvider + ACTION_SEND）。
+- **FileProvider**：Manifest 增加 `androidx.core.content.FileProvider`（`com.langqi.fakegps.fileprovider`），新增 `res/xml/file_paths.xml`。
+- **单测**：新增 `RouteExporterTest`（3 个）→ 总计 53。
+
+## 8. 时效性说明
+
+- 冻结版 v2：磁盘上最新源码 mtime = `2026-10-28 19:55:08`（`MainActivity.java`），构建于 `19:55:25` 完成，**APK / 测试 / lint 三项均基于该时刻源码**；19:56:14 复核无更新。
 - 若此后任何 Java / res / Manifest / Gradle 被修改，需按 §4.1 复跑并更新本报告中的 APK 大小、SHA-256、测试计数与 lint 状态。
-- 本轮之前的两份旧 APK 记录见 §4.2「历史版本」，避免交付时混淆。
+- 交付时请只使用 §4.2 的「当前」APK 与其 SHA-256，勿与历史版本混淆。
 
-## 8. 未修改 app 源码的声明
+## 9. 未修改 app 源码的声明
 
 本角色只写入了：`.android-sdk/**`（SDK）、`<ws>\.gradle-home`、`<ws>\.android-user-home`、`tmp/**`（下载/检查脚本）、`dlut-FakeRun/local.properties`（gitignored）、仓库根 `build-log.txt`、`lint-log.txt`、本报告。未修改任何 Java / res / AndroidManifest / Gradle 构建脚本。

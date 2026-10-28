@@ -16,7 +16,10 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +47,7 @@ import com.google.android.material.timepicker.TimeFormat;
 import com.langqi.fakegps.core.AppPrefs;
 import com.langqi.fakegps.core.Formats;
 import com.langqi.fakegps.core.Route;
+import com.langqi.fakegps.core.RouteExporter;
 import com.langqi.fakegps.core.RouteParser;
 import com.langqi.fakegps.core.RouteStore;
 import com.langqi.fakegps.core.SimulationConfig;
@@ -50,8 +55,12 @@ import com.langqi.fakegps.reminder.ReminderScheduler;
 import com.langqi.fakegps.ui.RouteAdapter;
 import com.langqi.fakegps.ui.RoutePreviewView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
@@ -98,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<String[]> permissionLauncher;
     private ActivityResultLauncher<String[]> documentLauncher;
     private ActivityResultLauncher<Intent> sketchLauncher;
+    private ActivityResultLauncher<String> createDocumentLauncher;
+
+    private RouteStore.RouteSummary pendingExportRoute;
+    private String pendingExportFormat = "kml";
 
     private boolean receiverRegistered;
     private boolean updatingTarget;
@@ -237,7 +250,14 @@ public class MainActivity extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         loadRoute();
-                        toast("手绘路线已保存并设为当前路线");
+                        toast("路线已保存并设为当前路线");
+                    }
+                });
+        createDocumentLauncher = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("application/octet-stream"),
+                uri -> {
+                    if (uri != null) {
+                        writeExportFile(uri);
                     }
                 });
     }
@@ -416,8 +436,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onRouteDelete(RouteStore.RouteSummary summary) {
-                confirmDeleteRoute(dialog, summary);
+            public void onRouteActions(RouteStore.RouteSummary summary) {
+                showRouteActions(dialog, (RouteAdapter) recycler.getAdapter(), summary);
             }
         });
         recycler.setAdapter(adapter);
@@ -456,6 +476,139 @@ public class MainActivity extends AppCompatActivity {
                     sheet.dismiss();
                 })
                 .show();
+    }
+
+    private void showRouteActions(BottomSheetDialog sheet, RouteAdapter adapter,
+                                  RouteStore.RouteSummary summary) {
+        final String[] actions = {"重命名", "在地图上编辑轨迹", "导出 KML 文件", "导出 GPX 文件",
+                "分享路线", "删除路线"};
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(summary.name)
+                .setItems(actions, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            showRenameDialog(adapter, summary);
+                            break;
+                        case 1:
+                            sheet.dismiss();
+                            sketchLauncher.launch(new Intent(this, RouteSketchActivity.class)
+                                    .putExtra(RouteSketchActivity.EXTRA_ROUTE_ID, summary.id));
+                            break;
+                        case 2:
+                            startExport(summary, "kml");
+                            break;
+                        case 3:
+                            startExport(summary, "gpx");
+                            break;
+                        case 4:
+                            shareRoute(summary);
+                            break;
+                        case 5:
+                            confirmDeleteRoute(sheet, summary);
+                            break;
+                        default:
+                            break;
+                    }
+                })
+                .show();
+    }
+
+    private void showRenameDialog(RouteAdapter adapter, RouteStore.RouteSummary summary) {
+        EditText input = new EditText(this);
+        input.setText(summary.name);
+        input.setSelection(input.getText().length());
+        FrameLayout container = new FrameLayout(this);
+        int padding = dp(20);
+        container.setPadding(padding, dp(8), padding, 0);
+        container.addView(input, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("重命名路线")
+                .setView(container)
+                .setNegativeButton("取消", null)
+                .setPositiveButton("保存", (dialog, which) -> {
+                    String name = input.getText().toString().trim();
+                    if (name.isEmpty()) {
+                        toast("名称不能为空");
+                        return;
+                    }
+                    if (routeStore.rename(summary.id, name)) {
+                        if (summary.id.equals(prefs.getRouteId())) {
+                            loadRoute();
+                        }
+                        adapter.submit(routeStore.list(), prefs.getRouteId());
+                        toast("已重命名为「" + name + "」");
+                    } else {
+                        toast("重命名失败，路线可能已被删除");
+                    }
+                })
+                .show();
+    }
+
+    private void startExport(RouteStore.RouteSummary summary, String format) {
+        pendingExportRoute = summary;
+        pendingExportFormat = format;
+        try {
+            createDocumentLauncher.launch(RouteExporter.suggestedFileName(summary.name, format));
+        } catch (Exception e) {
+            toast("无法打开文件保存器：" + e.getMessage());
+        }
+    }
+
+    private void writeExportFile(Uri uri) {
+        RouteStore.RouteSummary summary = pendingExportRoute;
+        if (summary == null) {
+            return;
+        }
+        Route exportRoute = routeStore.get(summary.id);
+        if (exportRoute == null) {
+            toast("路线不存在，无法导出");
+            pendingExportRoute = null;
+            return;
+        }
+        String content = "gpx".equals(pendingExportFormat)
+                ? RouteExporter.toGpx(exportRoute) : RouteExporter.toKml(exportRoute);
+        try (OutputStream outputStream = getContentResolver().openOutputStream(uri)) {
+            if (outputStream == null) {
+                throw new IOException("无法写入文件");
+            }
+            outputStream.write(content.getBytes(StandardCharsets.UTF_8));
+            toast("已导出：" + RouteExporter.suggestedFileName(summary.name, pendingExportFormat));
+        } catch (Exception e) {
+            toast("导出失败：" + e.getMessage());
+        } finally {
+            pendingExportRoute = null;
+        }
+    }
+
+    private void shareRoute(RouteStore.RouteSummary summary) {
+        Route shareRoute = routeStore.get(summary.id);
+        if (shareRoute == null) {
+            toast("路线不存在，无法分享");
+            return;
+        }
+        try {
+            File shareDir = new File(getCacheDir(), "share");
+            if (!shareDir.exists() && !shareDir.mkdirs()) {
+                throw new IOException("无法创建临时目录");
+            }
+            File file = new File(shareDir,
+                    RouteExporter.suggestedFileName(shareRoute.name(), "kml"));
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                outputStream.write(RouteExporter.toKml(shareRoute)
+                        .getBytes(StandardCharsets.UTF_8));
+            }
+            Uri uri = FileProvider.getUriForFile(this,
+                    getPackageName() + ".fileprovider", file);
+            Intent send = new Intent(Intent.ACTION_SEND)
+                    .setType("application/vnd.google-earth.kml+xml")
+                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .putExtra(Intent.EXTRA_SUBJECT, shareRoute.name())
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(send, "分享路线"));
+        } catch (Exception e) {
+            toast("分享失败：" + e.getMessage());
+        }
     }
 
     private void showPasteDialog() {
@@ -942,5 +1095,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private int dp(float value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 }

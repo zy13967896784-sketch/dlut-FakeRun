@@ -12,6 +12,7 @@ import com.google.android.material.button.MaterialButton;
 import com.langqi.fakegps.core.GeoMath;
 import com.langqi.fakegps.core.GeoPoint;
 import com.langqi.fakegps.core.Route;
+import com.langqi.fakegps.core.RouteParser;
 import com.langqi.fakegps.core.RouteStore;
 
 import org.osmdroid.config.Configuration;
@@ -37,18 +38,25 @@ import java.util.Locale;
  */
 public class RouteSketchActivity extends AppCompatActivity {
 
+    /** 传入已有路线的 id 时为"编辑轨迹"模式，否则为新建手绘路线。 */
+    public static final String EXTRA_ROUTE_ID = "route_id";
+
     private static final double DEFAULT_LAT = 39.0855;
     private static final double DEFAULT_LNG = 121.8088;
     private static final int MAX_POINTS = 500;
 
     private final List<org.osmdroid.util.GeoPoint> sketchPoints = new ArrayList<>();
 
+    private RouteStore routeStore;
     private MapView mapView;
     private Polyline polyline;
     private TextView tvPointCount;
     private MaterialButton btnUndo;
     private MaterialButton btnClear;
     private MaterialButton btnSave;
+    private String editingRouteId;
+    private String editingRouteName;
+    private String editingRouteFormat = RouteParser.FORMAT_TEXT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +69,28 @@ public class RouteSketchActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_route_editor);
 
+        routeStore = new RouteStore(this);
+        String requestedRouteId = getIntent().getStringExtra(EXTRA_ROUTE_ID);
+        Route editingRoute = requestedRouteId == null ? null : routeStore.get(requestedRouteId);
+        if (editingRoute != null) {
+            editingRouteId = requestedRouteId;
+            editingRouteName = editingRoute.name();
+            editingRouteFormat = routeStore.formatOf(requestedRouteId);
+            for (GeoPoint point : editingRoute.points()) {
+                sketchPoints.add(new org.osmdroid.util.GeoPoint(point.latitude, point.longitude));
+            }
+        }
+
         MaterialToolbar toolbar = findViewById(R.id.editor_toolbar);
-        toolbar.setTitle(getString(R.string.route_sketch_title));
+        toolbar.setTitle(getString(editingRouteId == null
+                ? R.string.route_sketch_title : R.string.route_sketch_edit_title));
         toolbar.setNavigationOnClickListener(v -> finish());
 
         mapView = findViewById(R.id.map);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
         mapView.getController().setZoom(17.0);
-        mapView.getController().setCenter(initialCenter());
+        mapView.getController().setCenter(initialCenter(editingRoute));
 
         polyline = new Polyline(mapView);
         polyline.setColor(ContextCompat.getColor(this, R.color.brand_primary));
@@ -128,9 +149,9 @@ public class RouteSketchActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private org.osmdroid.util.GeoPoint initialCenter() {
+    private org.osmdroid.util.GeoPoint initialCenter(Route editingRoute) {
         try {
-            Route route = new RouteStore(this).current();
+            Route route = editingRoute != null ? editingRoute : routeStore.current();
             if (route != null && route.size() > 0) {
                 double latitude = 0.0;
                 double longitude = 0.0;
@@ -200,9 +221,16 @@ public class RouteSketchActivity extends AppCompatActivity {
         String name = "手绘路线 " + new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())
                 .format(new Date());
         try {
-            Route route = new RouteStore(this).importRoute(name, points, "DRAW");
-            toast("已保存：" + route.name() + "（"
-                    + String.format(Locale.US, "%.2f", route.totalMeters() / 1000.0) + " 公里）");
+            if (editingRouteId != null) {
+                Route updated = routeStore.updatePoints(editingRouteId, editingRouteName, points,
+                        editingRouteFormat);
+                toast("已保存修改：" + updated.name() + "（"
+                        + String.format(Locale.US, "%.2f", updated.totalMeters() / 1000.0) + " 公里）");
+            } else {
+                Route route = routeStore.importRoute(name, points, RouteParser.FORMAT_TEXT);
+                toast("已保存：" + route.name() + "（"
+                        + String.format(Locale.US, "%.2f", route.totalMeters() / 1000.0) + " 公里）");
+            }
             setResult(RESULT_OK);
             finish();
         } catch (Exception e) {

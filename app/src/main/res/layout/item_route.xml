@@ -40,12 +40,12 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/btn_item_delete"
+        android:id="@+id/btn_item_more"
         android:layout_width="@dimen/size_delete_button"
         android:layout_height="@dimen/size_delete_button"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/route_delete"
+        android:contentDescription="@string/route_actions"
         android:padding="10dp"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_more_vert"
         app:tint="@color/text_tertiary" />
 </LinearLayout>

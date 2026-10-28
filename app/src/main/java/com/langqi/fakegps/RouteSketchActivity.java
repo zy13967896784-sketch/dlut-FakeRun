@@ -41,8 +41,8 @@ public class RouteSketchActivity extends AppCompatActivity {
     /** 传入已有路线的 id 时为"编辑轨迹"模式，否则为新建手绘路线。 */
     public static final String EXTRA_ROUTE_ID = "route_id";
 
-    private static final double DEFAULT_LAT = 39.0855;
-    private static final double DEFAULT_LNG = 121.8088;
+    private static final double DEFAULT_LAT = 29.9131;
+    private static final double DEFAULT_LNG = 121.6362;
     private static final int MAX_POINTS = 500;
 
     private final List<org.osmdroid.util.GeoPoint> sketchPoints = new ArrayList<>();
@@ -162,7 +162,7 @@ public class RouteSketchActivity extends AppCompatActivity {
                 return new org.osmdroid.util.GeoPoint(latitude / route.size(), longitude / route.size());
             }
         } catch (Exception ignored) {
-            // 没有可用路线时使用大工操场默认位置
+            // 没有可用路线时使用宁大操场默认位置
         }
         return new org.osmdroid.util.GeoPoint(DEFAULT_LAT, DEFAULT_LNG);
     }

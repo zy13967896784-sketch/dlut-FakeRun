@@ -937,6 +937,7 @@ public class MainActivity extends AppCompatActivity {
         TextInputEditText varianceInput = content.findViewById(R.id.et_speed_variance);
         SwitchMaterial keepScreenSwitch = content.findViewById(R.id.switch_keep_screen);
         MaterialButton doneButton = content.findViewById(R.id.btn_settings_done);
+        MaterialButton repoButton = content.findViewById(R.id.btn_open_repo);
 
         intervalInput.setText(String.format(Locale.US, "%.1f", config.intervalMs / 1000.0));
         altitudeInput.setText(String.format(Locale.US, "%.0f", config.altitudeMeters));
@@ -946,6 +947,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(content);
+        repoButton.setOnClickListener(v -> openRepository());
         doneButton.setOnClickListener(v -> {
             Double interval = parseDouble(textOf(intervalInput));
             Double altitude = parseDouble(textOf(altitudeInput));
@@ -978,6 +980,19 @@ public class MainActivity extends AppCompatActivity {
             toast("设置已保存，下次开始模拟时生效");
         });
         dialog.show();
+    }
+
+    private void openRepository() {
+        String url = getString(R.string.repo_url);
+        if (url == null || url.trim().isEmpty() || "https://github.com/".equals(url.trim())) {
+            toast("仓库地址还未配置");
+            return;
+        }
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url.trim())));
+        } catch (Exception e) {
+            toast("无法打开浏览器：" + url);
+        }
     }
 
     private void refreshSetupCard() {

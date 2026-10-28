@@ -68,7 +68,7 @@ public final class RouteExporter {
         return builder.toString();
     }
 
-    /** 生成安全文件名，例如 "大工操场 3 公里.kml"。 */
+    /** 生成安全文件名，例如 "宁大操场.kml"。 */
     public static String suggestedFileName(String routeName, String extension) {
         String name = routeName == null ? "" : routeName.trim();
         name = name.replaceAll("[\\\\/:*?\"<>|\\r\\n\\t]", "_").trim();

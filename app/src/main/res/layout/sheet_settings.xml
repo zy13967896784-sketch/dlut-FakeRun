@@ -119,6 +119,17 @@
         android:textAppearance="@style/TextAppearance.App.Label.Small" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_open_repo"
+        style="@style/Widget.App.Button.Outlined"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_button_small"
+        android:layout_marginTop="16dp"
+        android:text="@string/open_repo"
+        app:icon="@drawable/ic_info"
+        app:iconGravity="textStart"
+        app:iconSize="18dp" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_settings_done"
         style="@style/Widget.App.Button.Primary"
         android:layout_width="match_parent"

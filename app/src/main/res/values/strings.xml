@@ -19,8 +19,8 @@
     <string name="value_left_default">0.00</string>
 
     <!-- 路线卡 / 路线库 -->
-    <string name="route_default_name">大工操场 3 公里</string>
-    <string name="route_default_meta">3.08 公里 · 224 个点</string>
+    <string name="route_default_name">宁大操场</string>
+    <string name="route_default_meta">1.03 公里 · 105 个点</string>
     <string name="route_preview_desc">路线预览</string>
     <string name="btn_change_route">更换</string>
     <string name="route_library_title">路线库</string>
@@ -30,8 +30,8 @@
     <string name="btn_paste_route">粘贴坐标</string>
     <string name="route_delete">删除</string>
     <string name="route_actions">路线操作</string>
-    <string name="route_item_name_default">大工操场 3 公里</string>
-    <string name="route_item_meta_default">3.08 公里 · 224 个点</string>
+    <string name="route_item_name_default">宁大操场</string>
+    <string name="route_item_meta_default">1.03 公里 · 105 个点</string>
 
     <!-- 目标卡 -->
     <string name="target_title">目标距离</string>
@@ -79,6 +79,8 @@
     <string name="helper_speed_variance">0 表示匀速；5~10% 会让轨迹更自然</string>
     <string name="switch_keep_screen">保持屏幕常亮</string>
     <string name="settings_hint">修改后将在下一次开始模拟时生效。</string>
+    <string name="open_repo">访问 GitHub 仓库</string>
+    <string name="repo_url">https://github.com/zy13967896784-sketch/-</string>
 
     <!-- 菜单 -->
     <string name="menu_help">使用说明</string>

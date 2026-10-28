@@ -18,7 +18,7 @@ public class RouteParserTest {
 
     private static final String KML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<kml xmlns=\"http://www.opengis.net/kml/2.2\"><Document>\n"
-            + "  <name>大工操场</name>\n"
+            + "  <name>宁大操场</name>\n"
             + "  <Placemark><LineString><coordinates>\n"
             + "    121.8088,39.0845,0 121.8089,39.0846,0 121.8090,39.0847,0\n"
             + "  </coordinates></LineString></Placemark>\n"
@@ -34,9 +34,9 @@ public class RouteParserTest {
 
     @Test
     public void parsesKmlCoordinatesAndName() throws Exception {
-        RouteParser.Result result = parse(KML, "three_km.kml");
+        RouteParser.Result result = parse(KML, "default_route.kml");
         assertEquals(3, result.points.size());
-        assertEquals("大工操场", result.name);
+        assertEquals("宁大操场", result.name);
         assertEquals(RouteParser.FORMAT_KML, result.format);
         assertEquals(39.0845, result.points.get(0).latitude, 1e-9);
         assertEquals(121.8088, result.points.get(0).longitude, 1e-9);

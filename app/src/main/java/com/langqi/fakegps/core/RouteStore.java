@@ -30,8 +30,9 @@ import java.util.Map;
  */
 public final class RouteStore {
 
-    public static final String BUILTIN_ID = "builtin_dlut_3k";
-    private static final String BUILTIN_NAME = "大工操场 3 公里";
+    public static final String BUILTIN_ID = "builtin_ningda_track";
+    private static final String LEGACY_BUILTIN_ID = "builtin_dlut_3k";
+    private static final String BUILTIN_NAME = "宁大操场";
     private static final String DIR_NAME = "routes";
     private static final int MAX_NAME_LENGTH = 40;
 
@@ -46,6 +47,19 @@ public final class RouteStore {
         this.prefs = new AppPrefs(this.context);
         if (!directory.exists() && !directory.mkdirs()) {
             // 目录创建失败时后续操作会各自报错，这里不中断。
+        }
+        removeLegacyBuiltin();
+    }
+
+    /** 旧版默认路线（大工操场）在新版中不再使用，清理掉避免路线库重复。 */
+    private void removeLegacyBuiltin() {
+        File legacy = new File(directory, LEGACY_BUILTIN_ID + ".json");
+        if (legacy.exists()) {
+            legacy.delete();
+            cache.remove(LEGACY_BUILTIN_ID);
+        }
+        if (LEGACY_BUILTIN_ID.equals(prefs.getRouteId())) {
+            prefs.setRouteId(null);
         }
     }
 
@@ -165,7 +179,7 @@ public final class RouteStore {
         return deleted;
     }
 
-    /** 确保内置的 3 公里操场路线存在。 */
+    /** 确保内置的操场路线存在（当前为宁大操场，约 1 公里一圈）。 */
     public Route ensureBuiltin() {
         File file = new File(directory, BUILTIN_ID + ".json");
         if (file.exists()) {
@@ -175,9 +189,11 @@ public final class RouteStore {
                 return cached;
             }
         }
-        try (InputStream inputStream = context.getResources().openRawResource(R.raw.three_km)) {
-            RouteParser.Result parsed = RouteParser.parse(inputStream, "three_km.kml");
-            Route route = new Route(BUILTIN_NAME, parsed.points);
+        try (InputStream inputStream = context.getResources().openRawResource(R.raw.default_route)) {
+            RouteParser.Result parsed = RouteParser.parse(inputStream, "default_route.kml");
+            String name = parsed.name == null || parsed.name.trim().isEmpty()
+                    ? BUILTIN_NAME : parsed.name.trim();
+            Route route = new Route(name, parsed.points);
             writeRoute(BUILTIN_ID, route, RouteParser.FORMAT_KML, true);
             cache.put(BUILTIN_ID, route);
             prefs.setRouteId(BUILTIN_ID);
